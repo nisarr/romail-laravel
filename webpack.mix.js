@@ -15,7 +15,6 @@ const webpackConfig = require('./webpack.config')
  | file for the application as well as bundling up all the JS files.
  |
  */
-
 mix
   .js('resources/js/app.js', 'public/js')
   .vue({ runtimeOnly: (process.env.NODE_ENV || 'production') === 'production' })
@@ -28,3 +27,4 @@ mix
   ])
   .version()
   .sourceMaps()
+  .disableSuccessNotifications()
