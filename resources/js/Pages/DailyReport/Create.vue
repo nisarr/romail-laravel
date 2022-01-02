@@ -9,9 +9,9 @@
       <form @submit.prevent="store">
         <div class="flex flex-wrap -mb-8 -mr-6 p-8">
 
-          <text-input v-model="form.date_min" :error="form.errors.date_min" type="date" class="pb-8 pr-6 w-full lg:w-1/2" label="Date Min" />
+          <text-input v-model="form.date_min" :error="form.errors.date_min" type="date" class="pb-8 pr-6 w-full lg:w-1/2" label="Date" />
 
-          <text-input v-model="form.date_max" :error="form.errors.date_max" type="date" class="pb-8 pr-6 w-full lg:w-1/2" label="Date Max" />
+         <!--  <text-input v-model="form.date_max" :error="form.errors.date_max" type="date" class="pb-8 pr-6 w-full lg:w-1/2" label="Date Max" /> -->
 
         <!--   <text-input v-model="form.first_name" :error="form.errors.first_name" class="pb-8 pr-6 w-full lg:w-1/2" label="First name" />
           <text-input v-model="form.last_name" :error="form.errors.last_name" class="pb-8 pr-6 w-full lg:w-1/2" label="Last name" />
@@ -24,7 +24,7 @@
           <file-input v-model="form.photo" :error="form.errors.photo" class="pb-8 pr-6 w-full lg:w-1/2" type="file" accept="image/*" label="Photo" /> -->
         </div>
         <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-          <loading-button :loading="form.processing" class="btn-indigo" type="submit">Create User</loading-button>
+          <loading-button :loading="form.processing" class="btn-indigo" type="submit">Add Report</loading-button>
         </div>
       </form>
     </div>
@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     store() {
-      this.form.post('/store')
+      this.form.post('/daily-report/add')
     },
   },
 }
