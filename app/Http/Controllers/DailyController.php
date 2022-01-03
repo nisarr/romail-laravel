@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Automattic\WooCommerce\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
-use Automattic\WooCommerce\Client;
 
 class DailyController extends Controller
 {
@@ -44,11 +45,11 @@ class DailyController extends Controller
         // ])[0]->total_sales;
         
         $preData['daily_cash_flow_sales'] = 4625;
-
         $preData['parcel_detail_bf'] = 76;
         $preData['parcel_detail_amount_bf'] = 78425;
-        
         $preData['bank_account_detail_bf'] = 18990;
+
+        $preData['users'] = User::all();
 
         return Inertia::render('DailyReport/Create', [
             'dateMin' => $date,

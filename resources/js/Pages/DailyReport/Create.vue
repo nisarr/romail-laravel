@@ -23,38 +23,47 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mb-10">
                 <table class="min-w-full divide-y divide-gray-200">
-                  <thead class="bg-gray-50">
-                    <tr>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Employee Name
+                  <thead class="bg-gray-200">
+                    <tr >
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                        Employee Name <button type="button" @click.prevent="addEmployee" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                           Add
+                        </button>
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Time in 
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Time out
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                        Action
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <!-- Odd row -->
-                    <!-- bg-gray-50 -->
-                    <tr class="bg-white">
+                    
+                    <tr class="bg-white" v-for="(e,i) in form.employees">
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        Jane Cooper
+                          
+                         <select-input v-model="e.user_id" class-input="py-1" class="pb-0 pr-6 w-full" label="" placeholder="">
+                          <option value="" disabled>Select Employee</option>
+                          <option :value="u.id" v-for="(u,u_i) in preData.users">{{ u.first_name }} {{ u.last_name }}</option>
+                           
+                        </select-input>
+
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Regional Paradigm Technician
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                         <text-input v-model="e.time_in" type="time" class-input="py-1" label="" />
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        jane.cooper@example.com
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <text-input v-model="e.time_out" type="time" class-input="py-1" label="" />
                       </td>
                      
                       <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                        <button type="button" @click.prevent="deleteEmployee(i)" class="inline-flex items-center px-2.5 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Delete
+                      </button>
                       </td>
                     </tr>
 
@@ -74,15 +83,14 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mb-10">
                 <table class="min-w-full divide-y divide-gray-200">
-                  <thead class="bg-gray-50">
+                  <thead class="bg-gray-200">
                     <tr>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Title
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Amount
                       </th>
-                      
                     </tr>
                   </thead>
                   <tbody>
@@ -91,8 +99,8 @@
                       <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
                         BF
                       </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
-                        {{ preData.daily_cash_flow_bf }}
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.daily_cash_flow_bf) }}
                       </td>
 
                     </tr>
@@ -101,8 +109,8 @@
                       <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
                         Sale / Recovery
                       </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
-                       {{ preData.daily_cash_flow_sales }}
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       {{ commaSeperated(preData.daily_cash_flow_sales) }}
                       </td> 
                     </tr>
 
@@ -110,8 +118,8 @@
                       <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
                         Expenses
                       </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
-                       -{{ totalExpense }}
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       -{{ commaSeperated(totalExpense) }}
                       </td> 
                     </tr>
 
@@ -119,7 +127,7 @@
                       <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
                         Bank Deposited
                       </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
                        <text-input v-model="form.daily_cash_flow.bank_deposited" type="text" class-input="py-1" label="" />
                       </td> 
                     </tr>
@@ -128,8 +136,8 @@
                       <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
                         Cash in Hand
                       </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
-                        {{ totalCashInHand }}
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalCashInHand) }}
                       </td> 
                     </tr>
 
@@ -149,19 +157,19 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mb-10">
                 <table class="min-w-full divide-y divide-gray-200">
-                  <thead class="bg-gray-50">
+                  <thead class="bg-gray-200">
                     <tr>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Title
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Amount 
                         <button type="button" @click.prevent="addExpense" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                            Add
                         </button>
                       </th>
                       
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                        Action
                       </th>
                     </tr>
@@ -172,7 +180,7 @@
                       <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
                         <text-input v-model="e.title" type="text" class-input="py-1" label="" />
                       </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
                         <text-input v-model="e.amount" type="text" class-input="py-1" label="" />
                       </td>
                        
@@ -187,8 +195,8 @@
                       <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                         Total Expense
                       </td>
-                      <td colspan="2" class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
-                        {{ totalExpense }}
+                      <td colspan="2" class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalExpense) }}
                       </td>
                        
                     </tr>
@@ -208,21 +216,21 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mb-10">
                 <table class="min-w-full divide-y divide-gray-200">
-                  <thead class="bg-gray-50">
+                  <thead class="bg-gray-200">
                     <tr>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         BF
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Current Orders
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Cash Received
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Returns
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Balance
                       </th>
                        
@@ -232,45 +240,45 @@
                 
                     <tr class="bg-white">
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ preData.parcel_detail_bf }}
+                        {{ commaSeperated(preData.parcel_detail_bf) }}
                       </td>
 
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <text-input v-model="form.parcel_details.current_orders" type="text" class-input="py-1" />
                       </td>
 
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <text-input v-model="form.parcel_details.cash_received" type="text" class-input="py-1" />
                       </td>
 
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <text-input v-model="form.parcel_details.returns" type="text" class-input="py-1" />
                       </td>
                      
                       <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        
+                        {{ commaSeperated(totalBalanceParcelDetail) }}
                       </td>
                     </tr>
 
                     <tr class="bg-white">
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ preData.parcel_detail_amount_bf }}
+                        {{ commaSeperated(preData.parcel_detail_amount_bf) }}
                       </td>
 
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <text-input v-model="form.parcel_details.current_orders_amount" type="text" class-input="py-1" />
                       </td>
 
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <text-input v-model="form.parcel_details.cash_received_amount" type="text" class-input="py-1" />
                       </td>
 
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <text-input v-model="form.parcel_details.returns_amount" type="text" class-input="py-1" />
                       </td>
                      
                       <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        
+                        {{ commaSeperated(totalBalanceAmountParcelDetail) }}
                       </td>
                     </tr>
 
@@ -290,24 +298,25 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mb-10">
                 <table class="min-w-full divide-y divide-gray-200">
-                  <thead class="bg-gray-50">
+                  <thead class="bg-gray-200">
                     <tr>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Transction Detail
-                        <button type="button" @click.prevent="addBankAccount" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                        Transaction Detail
+                        
+                      </th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                       Cash Type
+                      </th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                       Amount
+                       <button type="button" @click.prevent="addBankAccount" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                            Add
                         </button>
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                       Cash Type
-                      </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                       Amount
-                      </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                        Balance
                       </th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                        Action
                       </th>
                     </tr>
@@ -320,10 +329,10 @@
                       </td>
                       <td></td>
 
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500"></td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900"></td>
 
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
-                        {{ preData.bank_account_detail_bf }}
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.bank_account_detail_bf) }}
                       </td>
                        
                       <td class="px-4 py-1 whitespace-nowrap text-left text-sm font-medium">
@@ -357,12 +366,12 @@
                         </fieldset>
                       </td>
 
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
                         <text-input v-model="e.amount" type="text" class-input="py-1" label="" />
                       </td>
 
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
-                       {{ totalBankAccountBalance(i) }}
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       {{ commaSeperated(totalBankAccountBalance(i)) }}
                       </td>
                        
                       <td class="px-4 py-1 whitespace-nowrap text-left text-sm font-medium">
@@ -379,12 +388,12 @@
                       <td>
                          
                       </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
                        <strong> Cash In</strong>
                       </td>
 
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
-                        {{ totalCashIn }}
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalCashIn) }}
                       </td>
                        
                       <td class="px-4 py-1 whitespace-nowrap text-left text-sm font-medium">
@@ -399,12 +408,12 @@
                       <td>
                          
                       </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
                        <strong> Cash Out</strong>
                       </td>
 
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
-                        {{ totalCashOut }}
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalCashOut) }}
                       </td>
                        
                       <td class="px-4 py-1 whitespace-nowrap text-left text-sm font-medium">
@@ -419,12 +428,12 @@
                       <td>
                          
                       </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
                        <strong> Final Balance</strong>
                       </td>
 
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
-                        {{ totalBankAccountBalance(form.bank_account_details.length-1) }}
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalBankAccountBalance(form.bank_account_details.length-1)) }}
                       </td>
                        
                       <td class="px-4 py-1 whitespace-nowrap text-left text-sm font-medium">
@@ -452,7 +461,7 @@
           </select-input>
           <file-input v-model="form.photo" :error="form.errors.photo" class="pb-8 pr-6 w-full lg:w-1/2" type="file" accept="image/*" label="Photo" /> -->
         </div>
-        <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
+        <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100 mb-12">
           <loading-button :loading="form.processing" class="btn-indigo" type="submit">Add Report</loading-button>
         </div>
       </form>
@@ -511,15 +520,15 @@ export default {
     }
   },
   computed:{
+    
     dayInString(){
       return DateTime.fromFormat(this.form.date_min,'yyyy-MM-dd').toFormat('cccc');
     },
-
     // Daily Flow
     totalCashInHand(){
 
       var bd = this.form.daily_cash_flow.bank_deposited;
-      if(isNaN(bd) || bd === "" || bd === null){
+      if(this.isNaN(bd)){
         bd = 0;
       }
       console.log(bd)
@@ -532,7 +541,7 @@ export default {
         return this.parseAmount(prev, curr)
       }, 0);
 
-      if(t == "" || t == null || isNaN(t)){
+      if(this.isNaN(t)){
         return 0
       }
       return t;
@@ -547,7 +556,7 @@ export default {
         return this.parseAmount(prev, curr)
       }, 0);
 
-      if(t == "" || t == null || isNaN(t)){
+      if(this.isNaN(t)){
         return 0
       }
       return t;
@@ -561,19 +570,81 @@ export default {
          return this.parseAmount(prev, curr)
       }, 0);
 
-      if(t == "" || t == null || isNaN(t)){
+      if(this.isNaN(t)){
         return 0
       }
       return t;
+    },
+    totalBalanceParcelDetail(){
+        var current_orders = this.form.parcel_details.current_orders 
+        var cash_received = this.form.parcel_details.cash_received 
+        var returns = this.form.parcel_details.returns
+
+        if(this.isNaN(current_orders)){
+          current_orders = 0
+        }else{
+          current_orders = parseInt(current_orders)
+        }
+
+        if(this.isNaN(cash_received)){
+          cash_received = 0
+        }else{
+          cash_received = parseInt(cash_received)
+        }
+
+        if(this.isNaN(returns)){
+          returns = 0
+        }else{
+          returns = parseInt(returns)
+        }
+
+        return (current_orders + this.preData.parcel_detail_bf)-(cash_received+returns)
+    },
+    totalBalanceAmountParcelDetail(){
+        var current_orders = this.form.parcel_details.current_orders_amount 
+        var cash_received = this.form.parcel_details.cash_received_amount 
+        var returns = this.form.parcel_details.returns_amount
+        
+        if(this.isNaN(current_orders)){
+          current_orders = 0
+        }else{
+          current_orders = parseFloat(current_orders)
+        }
+
+        if(this.isNaN(cash_received)){
+          cash_received = 0
+        }else{
+          cash_received = parseFloat(cash_received)
+        }
+
+        if(this.isNaN(returns)){
+          returns = 0
+        }else{
+          returns = parseFloat(returns)
+        }
+
+        return (current_orders + this.preData.parcel_detail_amount_bf)-(cash_received+returns)
     }
   },
   methods: {
+    commaSeperated(val){
+      var parts = val.toString().split(".");
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      val = parts.join(".");
+      return val;
+    },
+    isNaN(num){
+      if(num == "" || num == null || isNaN(num)){
+        return true
+      }
+      return false;
+    },
     parseAmount(prev,curr){
-      if(prev == "" || prev == null || isNaN(prev)){
+      if(this.isNaN(prev)){
         curr = Math.abs(curr)
         return curr;
       }
-      if(curr == "" || curr == null || isNaN(curr)){
+      if(this.isNaN(curr)){
 
         prev = Math.abs(prev)
         return prev;
@@ -584,11 +655,14 @@ export default {
       ;
     },
     addEmployee(){
-      return {
-        name:"",
+     this.form.employees.push({
+        user_id:"",
         time_in:"",
         time_out:"",
-      }
+      })
+    },
+    deleteEmployee(i){
+     this.form.employees.splice(i,1)
     },
     addExpense(){
       this.form.expense_details.push({
