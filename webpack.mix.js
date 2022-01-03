@@ -28,3 +28,11 @@ mix
   .version()
   .sourceMaps()
   .disableSuccessNotifications()
+  .browserSync({
+  proxy:'http://romail-laravel.test',
+  port:3100,
+  files: ['.env'],
+  watchOptions: {
+        ignored: /node_modules/
+    }
+});
