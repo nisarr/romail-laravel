@@ -244,15 +244,15 @@
                       </td>
 
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <text-input v-model="form.parcel_details.current_orders" type="text" class-input="py-1" />
+                        <text-input v-model="preData.parcel_detail_current_orders" readonly="true" type="text" class-input="py-1" />
                       </td>
 
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <text-input v-model="form.parcel_details.cash_received" type="text" class-input="py-1" />
+                        <text-input v-model="preData.parcel_detail_cash_received" readonly="true" type="text" class-input="py-1" />
                       </td>
 
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <text-input v-model="form.parcel_details.returns" type="text" class-input="py-1" />
+                        <text-input v-model="preData.parcel_detail_returns" readonly="true" type="text" class-input="py-1" />
                       </td>
                      
                       <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -262,19 +262,19 @@
 
                     <tr class="bg-white">
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ commaSeperated(preData.parcel_detail_amount_bf) }}
+                        {{ commaSeperated(preData.parcel_detail_bf_amount) }}
                       </td>
 
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <text-input v-model="form.parcel_details.current_orders_amount" type="text" class-input="py-1" />
+                        <text-input v-model="preData.parcel_detail_current_orders_amount" readonly="true" type="text" class-input="py-1" />
                       </td>
 
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <text-input v-model="form.parcel_details.cash_received_amount" type="text" class-input="py-1" />
+                        <text-input v-model="preData.parcel_detail_cash_received_amount" readonly="true" type="text" class-input="py-1" />
                       </td>
 
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <text-input v-model="form.parcel_details.returns_amount" type="text" class-input="py-1" />
+                        <text-input v-model="preData.parcel_detail_returns_amount" readonly="true" type="text" class-input="py-1" />
                       </td>
                      
                       <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -367,13 +367,17 @@
                       </td>
 
                       <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
-                        <text-input v-model="e.amount" type="text" class-input="py-1" label="" />
+                        <text-input v-model="e.amount" type="text" class-input="py-1" label="" placeholder="Amount"/>
+                        <label :for="'file-upload_'+i" class="mt-1 inline-block relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                        <span>Upload Screenshot</span>
+                        <input :id="'file-upload_'+i" :name="file-upload" type="file" class="sr-only">
+                      </label>
                       </td>
 
                       <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
                        {{ commaSeperated(totalBankAccountBalance(i)) }}
                       </td>
-                       
+                       <td></td>
                       <td class="px-4 py-1 whitespace-nowrap text-left text-sm font-medium">
                          <button type="button" @click.prevent="deleteBankAccount(i)" class="inline-flex items-center px-2.5 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Delete
@@ -576,9 +580,9 @@ export default {
       return t;
     },
     totalBalanceParcelDetail(){
-        var current_orders = this.form.parcel_details.current_orders 
-        var cash_received = this.form.parcel_details.cash_received 
-        var returns = this.form.parcel_details.returns
+        var current_orders = this.preData.parcel_detail_current_orders 
+        var cash_received = this.preData.parcel_detail_cash_received 
+        var returns = this.preData.parcel_detail_returns
 
         if(this.isNaN(current_orders)){
           current_orders = 0
@@ -601,9 +605,9 @@ export default {
         return (current_orders + this.preData.parcel_detail_bf)-(cash_received+returns)
     },
     totalBalanceAmountParcelDetail(){
-        var current_orders = this.form.parcel_details.current_orders_amount 
-        var cash_received = this.form.parcel_details.cash_received_amount 
-        var returns = this.form.parcel_details.returns_amount
+        var current_orders = this.preData.parcel_detail_current_orders_amount 
+        var cash_received = this.preData.parcel_detail_cash_received_amount 
+        var returns = this.preData.parcel_detail_returns_amount
         
         if(this.isNaN(current_orders)){
           current_orders = 0
@@ -623,7 +627,7 @@ export default {
           returns = parseFloat(returns)
         }
 
-        return (current_orders + this.preData.parcel_detail_amount_bf)-(cash_received+returns)
+        return (current_orders + this.preData.parcel_detail_bf_amount)-(cash_received+returns)
     }
   },
   methods: {

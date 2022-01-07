@@ -23,7 +23,7 @@ class DailyController extends Controller
         // 'cs_9fba9d454faaaa771e570a3da23f7f2bea01db4e',
 
         $this->woocommerce = new Client(
-            'http://romail.test', 
+            'https://romail.codeinfaster.com', 
             'ck_ecbabce5c4c4ac6778c802a10e1b7c407a014ddf', 
             'cs_def890916fce0b61e027feb6778e61425e112ccc',
             [
@@ -43,12 +43,26 @@ class DailyController extends Controller
         //     'date_min' => $date,
         //     'date_max' => $date,
         // ])[0]->total_sales;
-        
-        $preData['daily_cash_flow_sales'] = 4625;
-        $preData['parcel_detail_bf'] = 76;
-        $preData['parcel_detail_amount_bf'] = 78425;
-        $preData['bank_account_detail_bf'] = 18990;
 
+        $preData['daily_cash_flow_sales'] = $this->woocommerce->get('orders',[
+            'status' => 'completed',
+            'per_page' => 100,
+        ]);
+
+        $preData['daily_cash_flow_sales'] = (collect($preData['daily_cash_flow_sales'])->sum('total'));
+        // $preData['daily_cash_flow_sales'] = 4625;
+
+        $preData['parcel_detail_bf'] = 76;
+        $preData['parcel_detail_current_orders'] = 6;
+        $preData['parcel_detail_cash_received'] = 5;
+        $preData['parcel_detail_returns'] = 6;
+
+        $preData['parcel_detail_bf_amount'] = 78425;
+        $preData['parcel_detail_current_orders_amount'] = 5150;
+        $preData['parcel_detail_cash_received_amount'] = 4625;
+        $preData['parcel_detail_returns_amount'] = 6125;
+
+        $preData['bank_account_detail_bf'] = 18990;
         $preData['users'] = User::all();
 
         return Inertia::render('DailyReport/Create', [
