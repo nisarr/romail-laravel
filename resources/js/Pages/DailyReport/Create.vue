@@ -535,8 +535,8 @@ export default {
       if(this.isNaN(bd)){
         bd = 0;
       }
-      console.log(bd)
-      return (this.preData.daily_cash_flow_bf + this.preData.daily_cash_flow_sales) - (parseFloat(this.totalExpense) + parseFloat(bd));
+    
+      return (parseFloat(this.preData.daily_cash_flow_bf) + parseFloat(this.preData.daily_cash_flow_sales)) - (parseFloat(this.totalExpense) + parseFloat(bd));
     },
 
     // Expense Details

@@ -12,6 +12,12 @@
         <div :class="isUrl('daily-report/add') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">Add Daily Report</div>
       </Link>
     </div>
+    <div class="mb-4">
+      <Link class="group flex items-center py-3" href="/monthly-report">
+        <icon name="office" class="mr-2 w-4 h-4" :class="isUrl('monthly-report') ? 'fill-white' : 'fill-indigo-400 group-hover:fill-white'" />
+        <div :class="isUrl('monthly-report') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">Monthly Report</div>
+      </Link>
+    </div>
     
   </div>
 </template>

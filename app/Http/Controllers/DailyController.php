@@ -39,7 +39,7 @@ class DailyController extends Controller
 
         $http = Http::get('http://romail.test/wp-admin/admin-ajax.php?action=codeinfaster_report&init_codeinfaster_apis=1');
         $response = ($http->json());
-
+        // dd($response);
         $preData = array();
         $preData['daily_cash_flow_bf'] = 33600;
         // $preData['daily_cash_flow_sales'] = $this->woocommerce->get('reports/sales',[
