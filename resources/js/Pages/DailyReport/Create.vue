@@ -721,6 +721,9 @@ export default {
           cash_received_amount:this.preData.parcel_detail_cash_received_amount,
           returns_amount:this.preData.parcel_detail_current_orders_amount,
         };
+
+    
+    this.form.expense_details = this.preData.expense_details
   }
 }
 </script>

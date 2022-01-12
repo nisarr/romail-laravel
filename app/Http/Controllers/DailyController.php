@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExpenseDetail;
 use App\Models\ParcelDetail;
 use App\Models\User;
 use Automattic\WooCommerce\Client;
@@ -70,6 +71,15 @@ class DailyController extends Controller
             },$pendingOrders);
         }
         $preData['pendingOrders'] = $pendingOrders;
+
+        $preData['expense_details'] = ExpenseDetail::where('date',$date)->get()->transform(function($item){
+            return [
+                'id' => $item->id,
+                'title' => $item->field,
+                'amount' => (string)$item->value,
+            ];
+        });
+
         $preData['users'] = User::all();
 
         return Inertia::render('DailyReport/Create', [
@@ -95,7 +105,7 @@ class DailyController extends Controller
 
     public function store(Request $request){
 
-        // dd($request->pendingOrders);
+        // dd($request->all());
         if(is_array($request->pendingOrders) && count($request->pendingOrders) > 1){
                 $http = Http::asForm()->post('http://romail.test/wp-admin/admin-ajax.php?action=codeinfaster_report_update_orders&init_codeinfaster_apis=1',[
                 'ids' => implode(',', $request->pendingOrders),
@@ -115,7 +125,30 @@ class DailyController extends Controller
         $parcel_detail->returns_amount = $request->parcel_details['returns_amount'];
         $parcel_detail->save();
 
+        $updated_ExpenseDetail = [];
+        foreach ($request->expense_details as $expense) {
+            $ExpenseDetail = null;
+
+            if(array_key_exists('id',$expense) && $expense['id']){
+                $ExpenseDetail = ExpenseDetail::find($expense['id']);
+            }
+
+            if(!$ExpenseDetail){
+                $ExpenseDetail = new ExpenseDetail;
+                $ExpenseDetail->date = $request->date_min;
+            }
+
+            $ExpenseDetail->field = $expense['title'];
+            $ExpenseDetail->value = $expense['amount'];
+            $ExpenseDetail->save();
+
+            $updated_ExpenseDetail[] = $ExpenseDetail->id;
+        }
+
+        if($updated_ExpenseDetail){
+            ExpenseDetail::where('date',$request->date_min)->whereNotIn('id',$updated_ExpenseDetail)->delete();
+        }
+
         return redirect()->back();
-         
     }
 }
