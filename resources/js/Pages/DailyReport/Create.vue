@@ -503,6 +503,7 @@ export default {
       form: this.$inertia.form({
         date_min: this.dateMin,
         date_max: this.dateMax,
+        pendingOrders:this.preData.pendingOrders,
         daily_cash_flow:{
           bank_deposited:0
         },
@@ -510,14 +511,7 @@ export default {
         ],
         expense_details:[
         ],
-        parcel_details:{
-          current_orders:null,
-          cash_received:null,
-          returns:null,
-          current_orders_amount:null,
-          cash_received_amount:null,
-          returns_amount:null,
-        },
+        parcel_details:{},
         bank_account_details:[
         ]
       }),
@@ -718,5 +712,15 @@ export default {
       this.form.post('/daily-report/add')
     },
   },
+  mounted(){
+    this.form.parcel_details = {
+          current_orders:this.preData.parcel_detail_current_orders,
+          cash_received:this.preData.parcel_detail_cash_received,
+          returns:this.preData.parcel_detail_returns,
+          current_orders_amount:this.preData.parcel_detail_current_orders_amount,
+          cash_received_amount:this.preData.parcel_detail_cash_received_amount,
+          returns_amount:this.preData.parcel_detail_current_orders_amount,
+        };
+  }
 }
 </script>

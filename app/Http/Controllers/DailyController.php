@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ParcelDetail;
 use App\Models\User;
 use Automattic\WooCommerce\Client;
 use Illuminate\Http\Request;
@@ -37,11 +38,13 @@ class DailyController extends Controller
 
         $date = now()->setTimezone('Asia/Karachi')->format('Y-m-d');
 
-        $http = Http::get('http://romail.test/wp-admin/admin-ajax.php?action=codeinfaster_report&init_codeinfaster_apis=1');
+        $http = Http::asForm()->post('http://romail.test/wp-admin/admin-ajax.php?action=codeinfaster_report&init_codeinfaster_apis=1',[
+            'date' => $date
+        ]);
         $response = ($http->json());
         // dd($response);
         $preData = array();
-        $preData['daily_cash_flow_bf'] = 33600;
+        $preData['daily_cash_flow_bf'] = 0;//33600;
         // $preData['daily_cash_flow_sales'] = $this->woocommerce->get('reports/sales',[
         //     'date_min' => $date,
         //     'date_max' => $date,
@@ -49,17 +52,24 @@ class DailyController extends Controller
 
         $preData['daily_cash_flow_sales'] = $response['completed']['sale'];
 
-        $preData['parcel_detail_bf'] = 76;
+        $preData['parcel_detail_bf'] = 0;//76;
         $preData['parcel_detail_current_orders'] = $response['pending']['total_orders'];
         $preData['parcel_detail_cash_received'] = $response['completed']['total_orders'];
         $preData['parcel_detail_returns'] = $response['return']['total_orders'];
 
-        $preData['parcel_detail_bf_amount'] = 78425;
-        $preData['parcel_detail_current_orders_amount'] = $response['pending']['total_orders'];
-        $preData['parcel_detail_cash_received_amount'] = $response['completed']['total_orders'];
-        $preData['parcel_detail_returns_amount'] = $response['return']['total_orders'];
+        $preData['parcel_detail_bf_amount'] = 0;//78425;
+        $preData['parcel_detail_current_orders_amount'] = $response['pending']['sale'];
+        $preData['parcel_detail_cash_received_amount'] = $response['completed']['sale'];
+        $preData['parcel_detail_returns_amount'] = $response['return']['sale'];
 
-        $preData['bank_account_detail_bf'] = 18990;
+        $preData['bank_account_detail_bf'] = 0;//18990;
+        $pendingOrders = $response['pending']['pending_report_orders'] ?? [];
+        if(is_array($pendingOrders)){
+            $pendingOrders = array_map(function($val){
+                return $val[0];
+            },$pendingOrders);
+        }
+        $preData['pendingOrders'] = $pendingOrders;
         $preData['users'] = User::all();
 
         return Inertia::render('DailyReport/Create', [
@@ -85,12 +95,27 @@ class DailyController extends Controller
 
     public function store(Request $request){
 
-        $reports_data = $this->woocommerce->get('reports/sales',[
-            'date_min' => $request->date_min,
-            'date_max' => $request->date_min,
-        ]);
+        // dd($request->pendingOrders);
+        if(is_array($request->pendingOrders) && count($request->pendingOrders) > 1){
+                $http = Http::asForm()->post('http://romail.test/wp-admin/admin-ajax.php?action=codeinfaster_report_update_orders&init_codeinfaster_apis=1',[
+                'ids' => implode(',', $request->pendingOrders),
+                'date' => $request->date_min." 00:00:00",
+            ]);
+        }
+        
+        $response = ($http->body());
+  
+        $parcel_detail = new ParcelDetail;
+        $parcel_detail->date = $request->date_min;
+        $parcel_detail->current_orders = $request->parcel_details['current_orders'];
+        $parcel_detail->cash_received = $request->parcel_details['cash_received'];
+        $parcel_detail->returns = $request->parcel_details['returns'];
+        $parcel_detail->current_orders_amount = $request->parcel_details['current_orders_amount'];
+        $parcel_detail->cash_received_amount = $request->parcel_details['cash_received_amount'];
+        $parcel_detail->returns_amount = $request->parcel_details['returns_amount'];
+        $parcel_detail->save();
 
-        dd($reports_data[0]->total_sales);
-
+        return redirect()->back();
+         
     }
 }
