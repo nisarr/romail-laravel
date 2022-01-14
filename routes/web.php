@@ -82,6 +82,6 @@ Route::post('daily-report/add', [DailyController::class, 'store'])
     ->name('daily-report.add')
     ->middleware('auth');
 
-Route::get('monthly-report/add', [DailyController::class, 'create'])
+Route::get('monthly-report', [DailyController::class, 'monthlyReport'])
     ->name('monthly-report.add')
     ->middleware('auth');

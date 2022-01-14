@@ -497,21 +497,23 @@ export default {
     preData:Object,
   },
   layout: Layout,
-  remember: 'form',
+  // remember: 'form',
   data() {
     return {
       form: this.$inertia.form({
         date_min: this.dateMin,
         date_max: this.dateMax,
-        pendingOrders:this.preData.pendingOrders,
+        pendingOrders:[],
         daily_cash_flow:{
-          bank_deposited:0
+          bank_deposited:0,
+          cash_in_hand:0,
         },
         employees:[
         ],
         expense_details:[
         ],
-        parcel_details:{},
+        parcel_details:{
+        },
         bank_account_details:[
         ]
       }),
@@ -676,6 +678,7 @@ export default {
         title:"",
         cash_type:"out",
         amount:null,
+        bf:"",
       })
     },
     deleteBankAccount(i){
@@ -693,37 +696,72 @@ export default {
       }else{
         itemAmount = parseFloat(itemAmount)
       }
+      var balance = 0;
       if(i == 0){
         if(item.cash_type == 'in'){
-          return this.preData.bank_account_detail_bf + itemAmount;
+          balance = this.preData.bank_account_detail_bf + itemAmount;
         }else{
-          return this.preData.bank_account_detail_bf - itemAmount;
+          balance = this.preData.bank_account_detail_bf - itemAmount;
         }
+        this.form.bank_account_details[0].bf = balance;
       }else{
         if(item.cash_type == 'in'){
-          return this.totalBankAccountBalance(i-1) + itemAmount;
+          balance = this.totalBankAccountBalance(i-1) + itemAmount;
         }else{
-          return this.totalBankAccountBalance(i-1) - itemAmount;
+          balance = this.totalBankAccountBalance(i-1) - itemAmount;
         }
+        this.form.bank_account_details[i-1].bf = balance;
       }
 
+
+
+      return balance
     },
     store() {
+
+      // Bank Final balance
+      this.form.parcel_details.bf = this.totalBalanceParcelDetail;
+      this.form.parcel_details.bf_amount = this.totalBalanceAmountParcelDetail;
+
+      this.form.daily_cash_flow.cash_in_hand = this.totalCashInHand;
+
       this.form.post('/daily-report/add')
     },
   },
   mounted(){
-    this.form.parcel_details = {
-          current_orders:this.preData.parcel_detail_current_orders,
-          cash_received:this.preData.parcel_detail_cash_received,
-          returns:this.preData.parcel_detail_returns,
-          current_orders_amount:this.preData.parcel_detail_current_orders_amount,
-          cash_received_amount:this.preData.parcel_detail_cash_received_amount,
-          returns_amount:this.preData.parcel_detail_current_orders_amount,
-        };
+    this.form.date_min = this.dateMin;
 
-    
+    this.form.parcel_details = {
+        current_orders:this.preData.parcel_detail_current_orders,
+        cash_received:this.preData.parcel_detail_cash_received,
+        returns:this.preData.parcel_detail_returns,
+        current_orders_amount:this.preData.parcel_detail_current_orders_amount,
+        cash_received_amount:this.preData.parcel_detail_cash_received_amount,
+        returns_amount:this.preData.parcel_detail_current_orders_amount,
+      };
+    this.form.daily_cash_flow.bank_deposited = this.preData.daily_cash_flow_bank_deposited
+
+    this.form.pendingOrders = this.preData.pendingOrders 
+
     this.form.expense_details = this.preData.expense_details
+
+    this.form.bank_account_details = this.preData.bank_account_details
+    this.form.employees = this.preData.employees
+
+  },
+  watch:{
+    totalBalanceParcelDetail :function(val){
+      this.form.parcel_details.bf = val
+    },
+    totalBalanceAmountParcelDetail :function(val){
+      this.form.parcel_details.bf_amount = val
+    },
+    "form.date_min":function(val){
+      this.$inertia.get('/daily-report/add', {
+        date: val,
+         
+      })
+    }
   }
 }
 </script>
