@@ -285,6 +285,11 @@ class DailyController extends Controller
             'book_cost' => $response['book_cost'] ?? 0,
             'expense' => $response['expense'] ?? 0,
             'profit' => $response['sale'] - ($response['delivery_cost']+$response['book_cost']+$response['expense']),
+
+            'total_orders' => $response['total_orders'] ?? 0,
+            'total_completed_orders' => $response['total_completed_orders'] ?? 0,
+            'total_pending_orders' => $response['total_pending_orders'] ?? 0,
+            'total_orders_cash_received' => $response['total_orders_cash_received'] ?? 0,
         ];
 
         return Inertia::render('MonthlyReport/View', [

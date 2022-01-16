@@ -23,12 +23,48 @@
                         Title
                       </th>
                       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                        Amount
+                        Value/Amount
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                   
+                    <tr class="bg-white">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
+                        Total Orders
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        <strong>{{ commaSeperated(data.total_orders) }} </strong>
+                      </td> 
+                    </tr>
+                    <tr class="bg-white">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
+                        Completed Orders
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        <strong>{{ commaSeperated(data.total_completed_orders) }} </strong> 
+                      </td> 
+                    </tr>
+                    <tr class="bg-white">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
+                       Pending Orders
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        <strong>{{ commaSeperated(data.total_pending_orders) }} </strong>
+                      </td> 
+                    </tr>
+                    <!-- <tr class="bg-white">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
+                       Total Orders Cash Received
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        <strong>{{ commaSeperated(data.total_orders_cash_received) }} </strong>
+                      </td> 
+                    </tr> -->
+                    <tr>
+                      <td colspan="2">
+                        <hr>
+                      </td>
+                    </tr>
                     <tr class="bg-white">
                       <td style="width:250px" class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
                         Sale / Recovery
@@ -74,6 +110,8 @@
                         <strong>{{ commaSeperated(data.profit) }} </strong> <small>Rs</small>
                       </td> 
                     </tr>
+                    
+                    
 
  
                   </tbody>
