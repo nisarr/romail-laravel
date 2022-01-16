@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 03, 2022 at 06:39 PM
+-- Generation Time: Jan 16, 2022 at 03:18 PM
 -- Server version: 5.7.33
--- PHP Version: 7.4.19
+-- PHP Version: 8.0.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -49,15 +49,23 @@ INSERT INTO `accounts` (`id`, `name`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `bank_account_details` (
   `id` int(11) NOT NULL,
-  `date` timestamp NULL DEFAULT NULL,
+  `date` date DEFAULT NULL,
   `day` varchar(50) DEFAULT NULL,
   `bf` double DEFAULT NULL,
+  `title` varchar(200) DEFAULT NULL,
   `cash_type` enum('in','out') DEFAULT NULL,
   `amount` double DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bank_account_details`
+--
+
+INSERT INTO `bank_account_details` (`id`, `date`, `day`, `bf`, `title`, `cash_type`, `amount`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(3, '2022-01-14', NULL, -101, 'Tea', 'out', 101, '2022-01-13 16:11:19', '2022-01-13 16:11:19', NULL);
 
 -- --------------------------------------------------------
 
@@ -199,14 +207,46 @@ CREATE TABLE `daily_cash_flow` (
   `id` int(11) NOT NULL,
   `date` timestamp NULL DEFAULT NULL,
   `day` varchar(50) DEFAULT NULL,
-  `bf` double DEFAULT NULL,
-  `sale_or_recovery` double DEFAULT NULL,
-  `expense` double DEFAULT NULL,
-  `bank_deposit` double DEFAULT NULL,
+  `cash_in_hand` double DEFAULT NULL,
+  `bank_deposited` double DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `daily_cash_flow`
+--
+
+INSERT INTO `daily_cash_flow` (`id`, `date`, `day`, `cash_in_hand`, `bank_deposited`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, '2022-01-12 19:00:00', NULL, 401, 0, '2022-01-14 16:13:36', '2022-01-14 16:13:36', NULL),
+(2, '2022-01-13 19:00:00', NULL, 351, 0, '2022-01-14 16:14:32', '2022-01-14 16:14:32', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employee_details`
+--
+
+CREATE TABLE `employee_details` (
+  `id` int(11) NOT NULL,
+  `date` date DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `time_in` time DEFAULT NULL,
+  `time_out` time DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `employee_details`
+--
+
+INSERT INTO `employee_details` (`id`, `date`, `user_id`, `time_in`, `time_out`, `created_at`, `updated_at`) VALUES
+(1, '2022-01-13', 1, '02:37:00', NULL, '2022-01-13 16:37:45', '2022-01-13 16:37:45'),
+(7, '2022-01-15', 1, NULL, NULL, '2022-01-14 15:54:35', '2022-01-14 15:54:35'),
+(8, '2022-01-15', 8, NULL, NULL, '2022-01-14 15:54:35', '2022-01-14 15:54:35'),
+(9, '2022-01-15', 7, NULL, NULL, '2022-01-14 15:54:35', '2022-01-14 15:54:35');
 
 -- --------------------------------------------------------
 
@@ -216,14 +256,24 @@ CREATE TABLE `daily_cash_flow` (
 
 CREATE TABLE `expense_details` (
   `id` int(11) NOT NULL,
-  `date` timestamp NULL DEFAULT NULL,
+  `date` date DEFAULT NULL,
   `day` varchar(50) DEFAULT NULL,
-  `field` double DEFAULT NULL,
+  `field` varchar(255) DEFAULT NULL,
   `value` double DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `expense_details`
+--
+
+INSERT INTO `expense_details` (`id`, `date`, `day`, `field`, `value`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(4, '2022-01-13', NULL, 'Tea', 50, '2022-01-12 17:42:54', '2022-01-12 17:42:54', NULL),
+(5, '2022-01-13', NULL, 'Cup', 100, '2022-01-12 17:51:13', '2022-01-12 17:51:13', NULL),
+(6, '2022-01-01', NULL, 'Tea', 101, '2021-12-31 16:22:38', '2022-01-13 16:22:38', NULL),
+(7, '2022-01-14', NULL, 'Tea', 50, '2022-01-14 16:14:32', '2022-01-14 16:14:32', NULL);
 
 -- --------------------------------------------------------
 
@@ -404,6 +454,8 @@ CREATE TABLE `parcel_details` (
   `id` int(11) NOT NULL,
   `date` timestamp NULL DEFAULT NULL,
   `day` varchar(50) DEFAULT NULL,
+  `bf` double DEFAULT NULL,
+  `bf_amount` double DEFAULT NULL,
   `current_orders` int(11) DEFAULT NULL,
   `cash_received` int(11) DEFAULT NULL,
   `returns` int(11) DEFAULT NULL,
@@ -414,6 +466,43 @@ CREATE TABLE `parcel_details` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `parcel_details`
+--
+
+INSERT INTO `parcel_details` (`id`, `date`, `day`, `bf`, `bf_amount`, `current_orders`, `cash_received`, `returns`, `current_orders_amount`, `cash_received_amount`, `returns_amount`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, '2022-01-12 19:00:00', NULL, 3, 311, 4, 1, 0, 862, 551, 862, '2022-01-12 16:02:01', '2022-01-14 15:58:41', NULL),
+(2, '2022-01-12 19:00:00', NULL, NULL, NULL, 3, 1, 1, 862, 301, 862, '2022-01-12 16:08:33', '2022-01-12 16:08:33', NULL),
+(3, '2022-01-12 19:00:00', NULL, NULL, NULL, 3, 1, 1, 862, 0, 862, '2022-01-12 16:28:35', '2022-01-12 16:28:35', NULL),
+(4, '2022-01-12 19:00:00', NULL, NULL, NULL, 3, 1, 1, 862, 0, 862, '2022-01-12 16:29:59', '2022-01-12 16:29:59', NULL),
+(5, '2022-01-12 19:00:00', NULL, NULL, NULL, 3, 1, 1, 862, 0, 862, '2022-01-12 16:30:23', '2022-01-12 16:30:23', NULL),
+(6, '2022-01-12 19:00:00', NULL, NULL, NULL, 3, 1, 1, 862, 301, 862, '2022-01-12 16:59:03', '2022-01-12 16:59:03', NULL),
+(7, '2022-01-12 19:00:00', NULL, NULL, NULL, 3, 1, 1, 862, 301, 862, '2022-01-12 16:59:35', '2022-01-12 16:59:35', NULL),
+(8, '2022-01-12 19:00:00', NULL, NULL, NULL, 3, 1, 1, 862, 301, 862, '2022-01-12 16:59:54', '2022-01-12 16:59:54', NULL),
+(9, '2022-01-12 19:00:00', NULL, NULL, NULL, 3, 1, 1, 862, 301, 862, '2022-01-12 17:13:14', '2022-01-12 17:13:14', NULL),
+(10, '2022-01-12 19:00:00', NULL, NULL, NULL, 3, 1, 1, 862, 301, 862, '2022-01-12 17:13:34', '2022-01-12 17:13:34', NULL),
+(11, '2022-01-12 19:00:00', NULL, NULL, NULL, 3, 1, 1, 862, 301, 862, '2022-01-12 17:13:41', '2022-01-12 17:13:41', NULL),
+(12, '2022-01-12 19:00:00', NULL, NULL, NULL, 4, 1, 0, 862, 551, 862, '2022-01-12 17:39:04', '2022-01-12 17:39:04', NULL),
+(13, '2022-01-12 19:00:00', NULL, NULL, NULL, 4, 1, 0, 862, 551, 862, '2022-01-12 17:40:33', '2022-01-12 17:40:33', NULL),
+(14, '2022-01-12 19:00:00', NULL, NULL, NULL, 4, 1, 0, 862, 551, 862, '2022-01-12 17:40:53', '2022-01-12 17:40:53', NULL),
+(15, '2022-01-12 19:00:00', NULL, NULL, NULL, 4, 1, 0, 862, 551, 862, '2022-01-12 17:41:07', '2022-01-12 17:41:07', NULL),
+(16, '2022-01-12 19:00:00', NULL, NULL, NULL, 4, 1, 0, 862, 551, 862, '2022-01-12 17:41:51', '2022-01-12 17:41:51', NULL),
+(17, '2022-01-12 19:00:00', NULL, NULL, NULL, 4, 1, 0, 862, 551, 862, '2022-01-12 17:42:54', '2022-01-12 17:42:54', NULL),
+(18, '2022-01-12 19:00:00', NULL, NULL, NULL, 4, 1, 0, 862, 551, 862, '2022-01-12 17:51:13', '2022-01-12 17:51:13', NULL),
+(19, '2022-01-13 19:00:00', NULL, 3, 311, 0, 0, 0, 0, 0, 0, '2022-01-13 16:09:36', '2022-01-14 16:03:09', NULL),
+(20, '2022-01-13 19:00:00', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, '2022-01-13 16:09:59', '2022-01-13 16:09:59', NULL),
+(21, '2022-01-13 19:00:00', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, '2022-01-13 16:10:25', '2022-01-13 16:10:25', NULL),
+(22, '2022-01-13 19:00:00', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, '2022-01-13 16:10:43', '2022-01-13 16:10:43', NULL),
+(23, '2022-01-13 19:00:00', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, '2022-01-13 16:11:19', '2022-01-13 16:11:19', NULL),
+(24, '2022-01-13 19:00:00', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, '2022-01-13 16:22:38', '2022-01-13 16:22:38', NULL),
+(25, '2022-01-12 19:00:00', NULL, NULL, NULL, 4, 1, 0, 862, 551, 862, '2022-01-13 16:37:45', '2022-01-13 16:37:45', NULL),
+(26, '2022-01-12 19:00:00', NULL, NULL, NULL, 4, 1, 0, 862, 551, 862, '2022-01-13 16:39:14', '2022-01-13 16:39:14', NULL),
+(27, '2022-01-14 19:00:00', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, '2022-01-14 15:54:28', '2022-01-14 15:54:28', NULL),
+(28, '2022-01-14 19:00:00', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, '2022-01-14 15:54:35', '2022-01-14 15:54:35', NULL),
+(29, '2022-01-12 19:00:00', NULL, NULL, NULL, 4, 1, 0, 862, 551, 862, '2022-01-14 15:56:07', '2022-01-14 15:56:07', NULL),
+(30, '2022-01-12 19:00:00', NULL, 3, 311, 4, 1, 0, 862, 551, 862, '2022-01-14 15:56:48', '2022-01-14 15:56:48', NULL),
+(31, '2022-01-12 19:00:00', NULL, 3, 311, 4, 1, 0, 862, 551, 862, '2022-01-14 15:57:43', '2022-01-14 15:57:43', NULL);
 
 -- --------------------------------------------------------
 
@@ -453,10 +542,10 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
-  `account_id` int(11) NOT NULL,
-  `first_name` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_name` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `first_name` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_name` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `owner` tinyint(1) NOT NULL DEFAULT '0',
@@ -473,11 +562,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `account_id`, `first_name`, `last_name`, `email`, `email_verified_at`, `password`, `owner`, `photo_path`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, 'John', 'Doe', 'johndoe@example.com', '2022-01-03 10:28:58', '$2y$10$DC2qxFb7Tth823a/MYs9g.DUa2w1XO5IJgwONCTkTXsgybwvvS7IO', 1, NULL, 'RnDXutXRFm', '2022-01-03 10:28:58', '2022-01-03 10:28:58', NULL),
-(2, 1, 'Alisa', 'Emard', 'tkiehn@example.net', '2022-01-03 10:28:58', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 0, NULL, 'cYkZwbJiXw', '2022-01-03 10:28:58', '2022-01-03 10:28:58', NULL),
-(3, 1, 'Evalyn', 'Hansen', 'monique.feeney@example.com', '2022-01-03 10:28:58', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 0, NULL, 'FwJI5o3DVo', '2022-01-03 10:28:58', '2022-01-03 10:28:58', NULL),
-(4, 1, 'Camren', 'Reilly', 'kmitchell@example.org', '2022-01-03 10:28:58', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 0, NULL, 'TOsgeuFplZ', '2022-01-03 10:28:58', '2022-01-03 10:28:58', NULL),
-(5, 1, 'Lane', 'McGlynn', 'providenci72@example.net', '2022-01-03 10:28:58', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 0, NULL, '9jBvcK5Sqp', '2022-01-03 10:28:58', '2022-01-03 10:28:58', NULL),
-(6, 1, 'Kory', 'Littel', 'jon81@example.org', '2022-01-03 10:28:58', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 0, NULL, 'kbclBaxqEb', '2022-01-03 10:28:58', '2022-01-03 10:28:58', NULL);
+(7, 1, 'Suleman', 'Ahmed', 'suleman@example.com', '2022-01-03 10:28:58', '$2y$10$DC2qxFb7Tth823a/MYs9g.DUa2w1XO5IJgwONCTkTXsgybwvvS7IO', 1, NULL, 'RnDXutXRFm', '2022-01-03 10:28:58', '2022-01-14 15:53:29', NULL),
+(8, 1, 'Romail', 'Khan', NULL, NULL, NULL, 0, NULL, NULL, '2022-01-14 15:54:09', '2022-01-14 15:54:09', NULL);
 
 --
 -- Indexes for dumped tables
@@ -507,6 +593,12 @@ ALTER TABLE `contacts`
 -- Indexes for table `daily_cash_flow`
 --
 ALTER TABLE `daily_cash_flow`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `employee_details`
+--
+ALTER TABLE `employee_details`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -577,7 +669,7 @@ ALTER TABLE `accounts`
 -- AUTO_INCREMENT for table `bank_account_details`
 --
 ALTER TABLE `bank_account_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `contacts`
@@ -589,13 +681,19 @@ ALTER TABLE `contacts`
 -- AUTO_INCREMENT for table `daily_cash_flow`
 --
 ALTER TABLE `daily_cash_flow`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `employee_details`
+--
+ALTER TABLE `employee_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `expense_details`
 --
 ALTER TABLE `expense_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -619,7 +717,7 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `parcel_details`
 --
 ALTER TABLE `parcel_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -631,7 +729,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
