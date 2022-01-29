@@ -17,6 +17,7 @@ use Inertia\Inertia;
 class DailyController extends Controller
 {
     public $woocommerce;
+    public $wp_url = 'http://romail.test';
 
     public function __construct(){
 
@@ -47,7 +48,7 @@ class DailyController extends Controller
             $date = now()->setTimezone('Asia/Karachi')->format('Y-m-d');
         }
 
-        $http = Http::asForm()->post('http://romail.test/wp-admin/admin-ajax.php?action=codeinfaster_report&init_codeinfaster_apis=1',[
+        $http = Http::asForm()->post($this->wp_url.'/wp-admin/admin-ajax.php?action=codeinfaster_report&init_codeinfaster_apis=1',[
             'date' => $date
         ]);
         $response = ($http->json());
@@ -141,7 +142,7 @@ class DailyController extends Controller
 
         // dd($request->all());
         if(is_array($request->pendingOrders) && count($request->pendingOrders) > 1){
-                $http = Http::asForm()->post('http://romail.test/wp-admin/admin-ajax.php?action=codeinfaster_report_update_orders&init_codeinfaster_apis=1',[
+                $http = Http::asForm()->post($this->wp_url.'/wp-admin/admin-ajax.php?action=codeinfaster_report_update_orders&init_codeinfaster_apis=1',[
                 'ids' => implode(',', $request->pendingOrders),
                 'date' => $request->date_min." 00:00:00",
             ]);
@@ -271,7 +272,7 @@ class DailyController extends Controller
         $from_date = Carbon::createFromFormat('Y-m',$month)->startOfMonth()->startOfDay()->format('Y-m-d H:i:s');
         $to_date = Carbon::createFromFormat('Y-m',$month)->endOfMonth()->endOfDay()->format('Y-m-d H:i:s');
         
-        $http = Http::asForm()->post('http://romail.test/wp-admin/admin-ajax.php?action=codeinfaster_report_monthly&init_codeinfaster_apis=1',[
+        $http = Http::asForm()->post($this->wp_url.'/wp-admin/admin-ajax.php?action=codeinfaster_report_monthly&init_codeinfaster_apis=1',[
             'from_date' => $from_date,
             'to_date' => $to_date,
         ]);
