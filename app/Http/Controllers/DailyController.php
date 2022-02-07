@@ -29,6 +29,10 @@ class DailyController extends Controller
         // 'ck_f159d44554d66ee817748f36a24f5ec3670ace02', 
         // 'cs_9fba9d454faaaa771e570a3da23f7f2bea01db4e',
 
+        if(config('app.env') == 'production'){
+           $this->wp_url = 'https://romailpublications.com';
+        }
+
         // $this->woocommerce = new Client(
         //     'https://romail.codeinfaster.com', 
         //     'ck_ecbabce5c4c4ac6778c802a10e1b7c407a014ddf', 
