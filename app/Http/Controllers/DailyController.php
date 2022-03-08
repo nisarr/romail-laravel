@@ -78,7 +78,7 @@ class DailyController extends Controller
         $preData['parcel_detail_cash_received'] = $response['completed']['total_orders'];
         $preData['parcel_detail_returns'] = $response['return']['total_orders'];
 
-        $preData['parcel_detail_bf_amount'] = $parcelDetailYesterday ? ($parcelDetailYesterday->bf_amount ?? 0) : 0;;//78425;
+        $preData['parcel_detail_bf_amount'] = $parcelDetailYesterday ? ($parcelDetailYesterday->bf_amount ?? 0) : 0;//78425;
         $preData['parcel_detail_current_orders_amount'] = $response['pending']['sale'];
         $preData['parcel_detail_cash_received_amount'] = $response['completed']['sale'];
         $preData['parcel_detail_returns_amount'] = $response['return']['sale'];

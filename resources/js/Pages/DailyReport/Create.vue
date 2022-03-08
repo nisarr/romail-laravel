@@ -598,7 +598,7 @@ export default {
           returns = parseInt(returns)
         }
 
-        return (current_orders + this.preData.parcel_detail_bf)-(cash_received+returns)
+        return (current_orders + parseInt(this.preData.parcel_detail_bf))-(cash_received+returns)
     },
     totalBalanceAmountParcelDetail(){
         var current_orders = this.preData.parcel_detail_current_orders_amount 
@@ -623,7 +623,7 @@ export default {
           returns = parseFloat(returns)
         }
 
-        return (current_orders + this.preData.parcel_detail_bf_amount)-(cash_received+returns)
+        return (current_orders + parseFloat(this.preData.parcel_detail_bf_amount))-(cash_received+returns)
     }
   },
   methods: {
