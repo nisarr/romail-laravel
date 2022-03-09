@@ -628,7 +628,9 @@ export default {
   },
   methods: {
     commaSeperated(val){
-      console.log(val);
+      if(val == null){
+        return 0;
+      }
       var parts = val.toString().split(".");
       parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       val = parts.join(".");
