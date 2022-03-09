@@ -29,9 +29,9 @@ class DailyController extends Controller
         // 'ck_f159d44554d66ee817748f36a24f5ec3670ace02', 
         // 'cs_9fba9d454faaaa771e570a3da23f7f2bea01db4e',
 
-        if(config('app.env') == 'production'){
+        // if(config('app.env') == 'production'){
            $this->wp_url = 'https://romailpublications.com';
-        }
+        // }
 
         // $this->woocommerce = new Client(
         //     'https://romail.codeinfaster.com', 
@@ -65,6 +65,7 @@ class DailyController extends Controller
         $parcelDetailYesterday = ParcelDetail::where('date',$yesterday)->first();
         $bankDetailYesterday = BankAccountDetail::where('date',$yesterday)->orderBy('id','desc')->first();
         $daily_cash_flow = DailyCashFlow::where('date',$yesterday)->first();
+        
         // dd($response);
         $preData = array();
  
@@ -118,9 +119,9 @@ class DailyController extends Controller
                 'time_out' => $item->time_out,
             ];
         });
-
+        // dd($preData);
         $preData['users'] = User::all();
-        // dd( $preData);
+        
         return Inertia::render('DailyReport/Create', [
             'dateMin' => $date,
             'dateMax' => $date,
