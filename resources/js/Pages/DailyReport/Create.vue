@@ -699,9 +699,9 @@ export default {
       var balance = 0;
       if(i == 0){
         if(item.cash_type == 'in'){
-          balance = this.preData.bank_account_detail_bf + itemAmount;
+          balance = parseFloat(this.preData.bank_account_detail_bf) + itemAmount;
         }else{
-          balance = this.preData.bank_account_detail_bf - itemAmount;
+          balance = parseFloat(this.preData.bank_account_detail_bf) - itemAmount;
         }
         this.form.bank_account_details[0].bf = balance;
       }else{
