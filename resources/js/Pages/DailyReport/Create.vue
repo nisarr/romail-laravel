@@ -3,7 +3,6 @@
     <Head title="Create User" />
     <h1 class="mb-8 text-3xl font-bold">
       <Link class="text-indigo-400 hover:text-indigo-600" href="/users">Add Daily Report</Link>
-      
     </h1>
     <div class="bg-white rounded-md shadow overflow-hidden">
       <form @submit.prevent="store">
@@ -452,6 +451,30 @@
           </div>
         </div>
         <!-- Bank Account Details ================ -->
+
+        <!-- Print Report ================ -->
+        <div class="flex flex-col w-full">
+          <h1 class="text-lg leading-6 font-medium text-gray-900 mb-2">Print</h1>
+          <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
+            <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+              <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mb-10">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-200">
+                     
+                  </thead>
+                  <tbody>
+                     
+                     <tr>
+                       
+                     </tr>
+ 
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Print Report ================ -->
            
          <!--  <text-input v-model="form.date_max" :error="form.errors.date_max" type="date" class="pb-8 pr-6 w-full lg:w-1/2" label="Date Max" /> -->
 
@@ -465,6 +488,7 @@
           </select-input>
           <file-input v-model="form.photo" :error="form.errors.photo" class="pb-8 pr-6 w-full lg:w-1/2" type="file" accept="image/*" label="Photo" /> -->
         </div>
+
         <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100 mb-12">
           <loading-button :loading="form.processing" class="btn-indigo" type="submit">Add Report</loading-button>
         </div>

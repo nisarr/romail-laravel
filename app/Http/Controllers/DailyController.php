@@ -282,7 +282,7 @@ class DailyController extends Controller
             'to_date' => $to_date,
         ]);
         $response = ($http->json());
-        
+      
         $response['expense'] = ExpenseDetail::whereDate('date','>=',$from_date)->whereDate('date','<=',$to_date)->sum('value');
 
         $data = [
