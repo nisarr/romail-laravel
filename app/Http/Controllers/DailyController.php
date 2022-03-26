@@ -56,7 +56,7 @@ class DailyController extends Controller
             'date' => $date
         ]);
         $response = ($http->json());
-
+        // dd($response);
         $dateCarbon = Carbon::parse($date);
 
         // YesterDay

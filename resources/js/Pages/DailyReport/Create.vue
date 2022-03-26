@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Head title="Create User" />
+    <Head title="Daily Report" />
     <h1 class="mb-8 text-3xl font-bold">
       <Link class="text-indigo-400 hover:text-indigo-600" href="/users">Add Daily Report</Link>
     </h1>
@@ -199,9 +199,9 @@
                       </td>
                        
                     </tr>
- 
                   </tbody>
                 </table>
+
               </div>
             </div>
           </div>
@@ -301,7 +301,6 @@
                     <tr>
                       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                         Transaction Detail
-                        
                       </th>
                       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                        Cash Type
@@ -446,33 +445,302 @@
  
                   </tbody>
                 </table>
+
+
               </div>
             </div>
           </div>
         </div>
         <!-- Bank Account Details ================ -->
 
+<!-- =========================================================================================================== -->
+<!-- =========================================================================================================== -->
+<!-- =========================================================================================================== -->
+
         <!-- Print Report ================ -->
-        <div class="flex flex-col w-full">
-          <h1 class="text-lg leading-6 font-medium text-gray-900 mb-2">Print</h1>
-          <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
-            <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-              <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mb-10">
-                <table class="min-w-full divide-y divide-gray-200">
+        <div id="print_report" class="flex flex-col w-full" style="display:none">
+          <!-- <h1 class="text-lg leading-6 font-medium text-gray-900 mb-2">Print</h1> -->
+           <!-- <hr> -->
+              <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">Employee Details</h3>
+                <table style="width:100%;">
                   <thead class="bg-gray-200">
-                     
+                     <tr>
+                       <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider"> Name</th>
+                       <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Time in </th>
+                       <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Time out</th>
+                     </tr>
                   </thead>
                   <tbody>
                      
-                     <tr>
-                       
+                     <tr v-for="(e,i) in form.employees">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">{{ getUserById(e.user_id).first_name }} {{ getUserById(e.user_id).last_name }}</td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">{{ e.time_in }} </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">{{ e.time_out }} </td>
                      </tr>
  
                   </tbody>
                 </table>
-              </div>
-            </div>
-          </div>
+
+                <!-- <hr> -->
+
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">Daily Cash Flow</h3>
+                <table style="width:100%;">
+                  <thead class="bg-gray-200">
+                     <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider"><strong>Title</strong></th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider"><strong>Amount</strong></th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        BF
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.daily_cash_flow_bf) }}
+                      </td>
+
+                    </tr>
+
+                     <tr>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        Sale / Recovery
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       {{ commaSeperated(preData.daily_cash_flow_sales) }}
+                      </td> 
+                    </tr>
+
+                    <tr>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        Expenses
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       -{{ commaSeperated(totalExpense) }}
+                      </td> 
+                    </tr>
+
+                    <tr>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        Bank Deposited
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       {{ form.daily_cash_flow.bank_deposited }}
+                      </td> 
+                    </tr>
+
+                    <tr>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        Cash in Hand
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalCashInHand) }}
+                      </td> 
+                    </tr>
+                  </tbody>
+                </table>
+
+                <!-- <hr> -->
+                <h3>
+                  Expense Detail
+                </h3>
+                 <table style="width:100%;">
+                  <thead class="bg-gray-200">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Title</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+     
+                    <tr v-for="(e,i) in form.expense_details">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                      {{ e.title }}
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ e.amount }}
+                      </td>
+                    </tr>
+                     <tr >
+                      <td >
+                       <strong> Total Expense</strong>
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalExpense) }}
+                      </td>
+                       
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- <hr> -->
+                <h3>
+                  Parcel Details
+                </h3>
+               <table style="width:100%;">
+                  <thead class="bg-gray-200">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">BF</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Current Orders</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Cash Received</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Returns</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.parcel_detail_bf) }}
+                      </td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.parcel_detail_current_orders) }}
+                        
+                      </td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+
+                        {{ commaSeperated(preData.parcel_detail_cash_received) }}
+                       
+                      </td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.parcel_detail_returns) }}
+                   
+                      </td>
+                     
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalBalanceParcelDetail) }}
+                      </td>
+                    </tr>
+
+                    <tr class="bg-white">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.parcel_detail_bf_amount) }}
+                      </td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.parcel_detail_current_orders_amount) }}
+                      </td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.parcel_detail_cash_received_amount) }}
+                      </td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.parcel_detail_returns_amount) }}
+                      </td>
+                     
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalBalanceAmountParcelDetail) }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">Bank Account Details</h3>
+               
+               <table style="width:100%;">
+                  <thead class="bg-gray-200">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Transaction Title</th>
+                     
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Cash Type</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Amount</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+ 
+                    <tr class="bg-white"> 
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                         BF
+                      </td>
+                      
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900"></td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900"></td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(preData.bank_account_detail_bf) }}
+                      </td>
+                       
+                       
+                    </tr>
+ 
+                    <tr class="bg-white" v-for="(e,i) in form.bank_account_details">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ e.title }}
+                      </td>
+                       <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                         {{ e.cash_type }}
+                       </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       {{ commaSeperated(e.amount) }}
+                        <!-- <label :for="'file-upload_'+i" class="mt-1 inline-block relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"> -->
+                        <!-- <span>Upload Screenshot</span> -->
+                        <!-- <input :id="'file-upload_'+i" :name="file-upload" type="file" class="sr-only"> -->
+                      <!-- </label> -->
+                      </td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       {{ commaSeperated(totalBankAccountBalance(i)) }}
+                      </td>
+                        
+                      
+                    </tr>
+
+                    <tr class="bg-white">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
+                        
+                      </td>
+                      <td></td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       <strong> Cash In</strong>
+                      </td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalCashIn) }}
+                      </td>
+                       
+                      
+                    </tr>
+
+                    <tr class="bg-white">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
+                        
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                         
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       <strong> Cash Out</strong>
+                      </td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalCashOut) }}
+                      </td>
+                       
+                     
+                    </tr>
+
+                    <tr class="bg-white">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
+                        
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                         
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       <strong> Final Balance</strong>
+                      </td>
+
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        {{ commaSeperated(totalBankAccountBalance(form.bank_account_details.length-1)) }}
+                      </td>
+                     
+                    </tr>
+
+                  </tbody>
+                </table>
         </div>
         <!-- Print Report ================ -->
            
@@ -490,8 +758,10 @@
         </div>
 
         <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100 mb-12">
+          <span class="btn-indigo mr-2" @click="print" >Print</span>
           <loading-button :loading="form.processing" class="btn-indigo" type="submit">Add Report</loading-button>
         </div>
+
       </form>
     </div>
   </div>
@@ -754,6 +1024,49 @@ export default {
 
       this.form.post('/daily-report/add')
     },
+
+    getUserById(id){
+      var user = this.preData.users.filter(item => {
+        return item.id == id
+      })
+      if(user.length > 0){
+        return user[0]
+      }else{
+        return {}
+      }
+    },
+    print(){
+      var mywindow = window.open('', 'PRINT', 'height=700,width=1000');
+      mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+      mywindow.document.write('<style>');
+      mywindow.document.write(`
+        table,body {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+      `);
+      mywindow.document.write('</style>');
+      mywindow.document.write('</head><body >');
+      mywindow.document.write('<h1> Daily Report: ' + DateTime.fromFormat(this.form.date_min,'yyyy-MM-dd').toFormat('dd MMMM yyyy')  + '</h1>');
+      mywindow.document.write(document.getElementById('print_report').innerHTML);
+      mywindow.document.write('</body></html>');
+
+      mywindow.print();
+      // mywindow.close();
+
+      return true;
+    }
   },
   mounted(){
     this.form.date_min = this.dateMin;
@@ -792,3 +1105,20 @@ export default {
   }
 }
 </script>
+
+<style>
+@media print {
+    .myDivToPrint {
+        background-color: white;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 18px;
+    }
+}
+</style>
