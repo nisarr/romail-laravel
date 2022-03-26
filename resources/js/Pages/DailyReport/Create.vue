@@ -367,10 +367,10 @@
 
                       <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
                         <text-input v-model="e.amount" type="text" class-input="py-1" label="" placeholder="Amount"/>
-                        <label :for="'file-upload_'+i" class="mt-1 inline-block relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                        <span>Upload Screenshot</span>
-                        <input :id="'file-upload_'+i" :name="file-upload" type="file" class="sr-only">
-                      </label>
+                        <!-- <label :for="'file-upload_'+i" class="mt-1 inline-block relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"> -->
+                        <!-- <span>Upload Screenshot</span> -->
+                        <!-- <input :id="'file-upload_'+i" :name="file-upload" type="file" class="sr-only"> -->
+                      <!-- </label> -->
                       </td>
 
                       <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
@@ -737,7 +737,7 @@ export default {
         }else{
           balance = this.totalBankAccountBalance(i-1) - itemAmount;
         }
-        this.form.bank_account_details[i-1].bf = balance;
+        this.form.bank_account_details[i].bf = balance;
       }
 
 
