@@ -115,10 +115,11 @@ class DailyController extends Controller
             return [
                 'id' => $item->id,
                 'user_id' => $item->user_id,
-                'time_in' => $item->time_in,
-                'time_out' => $item->time_out,
+                'time_in' => $item->time_in ? substr($item->time_in,0,-3) : null,
+                'time_out' => $item->time_out ? substr($item->time_in,0,-3) : null,
             ];
         });
+        
         // dd($preData);
         $preData['users'] = User::all();
         

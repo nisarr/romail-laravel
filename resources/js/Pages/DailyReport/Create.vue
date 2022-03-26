@@ -17,7 +17,7 @@
 
         <!-- Employee ================ -->
         <div class="flex flex-col w-full ">
-          <h1 class="text-lg leading-6 font-medium text-gray-900 mb-2">Employee</h1>
+          <h1 class="text-lg leading-6 font-medium text-gray-900 mb-2" >Employee</h1>
           <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mb-10">
@@ -458,10 +458,11 @@
 <!-- =========================================================================================================== -->
 
         <!-- Print Report ================ -->
-        <div id="print_report" class="flex flex-col w-full" style="display:none">
+        <div id="print_report" class="flex flex-col w-full" style="display:none;">
+          <div style="margin-right:8px">
           <!-- <h1 class="text-lg leading-6 font-medium text-gray-900 mb-2">Print</h1> -->
            <!-- <hr> -->
-              <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">Employee Details</h3>
+              <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2" style="margin-bottom:3px">Employee Details</h3>
                 <table style="width:100%;">
                   <thead class="bg-gray-200">
                      <tr>
@@ -472,10 +473,16 @@
                   </thead>
                   <tbody>
                      
-                     <tr v-for="(e,i) in form.employees">
+                     <tr v-for="(e,i) in form.employees" >
                       <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">{{ getUserById(e.user_id).first_name }} {{ getUserById(e.user_id).last_name }}</td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">{{ e.time_in }} </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">{{ e.time_out }} </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                        
+                        <span v-if="e.time_in != '' && e.time_in != null">
+                        {{ DateTime.fromFormat("19:19", "hh:mm").toFormat("hh:mm a") }} </span> 
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       <span v-if="e.time_out != '' && e.time_out != null"> {{ DateTime.fromFormat(e.time_out,'hh:mm').toFormat('hh:mm a') }}</span>
+                      </td>
                      </tr>
  
                   </tbody>
@@ -483,7 +490,9 @@
 
                 <!-- <hr> -->
 
-                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">Daily Cash Flow</h3>
+               <div style="display:flex">
+                 <div style="width:50%;margin-right:15px">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2" style="margin-bottom:3px">Daily Cash Flow</h3>
                 <table style="width:100%;">
                   <thead class="bg-gray-200">
                      <tr>
@@ -539,9 +548,10 @@
                     </tr>
                   </tbody>
                 </table>
-
-                <!-- <hr> -->
-                <h3>
+                 </div>
+               <div style="width:50%;margin-left:15px">
+                   <!-- <hr> -->
+                <h3 style="margin-bottom:3px">
                   Expense Detail
                 </h3>
                  <table style="width:100%;">
@@ -572,8 +582,12 @@
                     </tr>
                   </tbody>
                 </table>
-                <!-- <hr> -->
-                <h3>
+                 </div>
+               </div>
+
+                
+           
+                <h3 style="margin-bottom:3px">
                   Parcel Details
                 </h3>
                <table style="width:100%;">
@@ -637,7 +651,7 @@
                   </tbody>
                 </table>
 
-                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">Bank Account Details</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2" style="margin-bottom:3px">Bank Account Details</h3>
                
                <table style="width:100%;">
                   <thead class="bg-gray-200">
@@ -742,6 +756,7 @@
                   </tbody>
                 </table>
         </div>
+        </div>
         <!-- Print Report ================ -->
            
          <!--  <text-input v-model="form.date_max" :error="form.errors.date_max" type="date" class="pb-8 pr-6 w-full lg:w-1/2" label="Date Max" /> -->
@@ -775,7 +790,7 @@ import TextInput from '@/Shared/TextInput'
 import SelectInput from '@/Shared/SelectInput'
 import LoadingButton from '@/Shared/LoadingButton'
 const { DateTime } = require("luxon");
-
+ 
 export default {
   components: {
     FileInput,
@@ -794,6 +809,7 @@ export default {
   // remember: 'form',
   data() {
     return {
+      DateTime,
       form: this.$inertia.form({
         date_min: this.dateMin,
         date_max: this.dateMax,
@@ -1053,7 +1069,7 @@ td, th {
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+  background-color: #fff;
 }
       `);
       mywindow.document.write('</style>');
