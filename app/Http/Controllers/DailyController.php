@@ -64,6 +64,9 @@ class DailyController extends Controller
 
         $parcelDetailYesterday = ParcelDetail::where('date',$yesterday)->first();
         $bankDetailYesterday = BankAccountDetail::where('date',$yesterday)->orderBy('id','desc')->first();
+        if(!$bankDetailYesterday){
+            $bankDetailYesterday = BankAccountDetail::where('date','<',$yesterday)->orderBy('date','desc')->first();
+        }
         $daily_cash_flow = DailyCashFlow::where('date',$yesterday)->first();
         
         // dd($response);
