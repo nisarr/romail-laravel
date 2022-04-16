@@ -294,7 +294,8 @@ class DailyController extends Controller
             'delivery_cost' => $response['delivery_cost'] ?? 0,
             'book_cost' => $response['book_cost'] ?? 0,
             'expense' => $response['expense'] ?? 0,
-            'profit' => $response['sale'] - ($response['delivery_cost']+$response['book_cost']+$response['expense']),
+            // $response['expense']
+            'profit' => $response['sale'] - ($response['delivery_cost']+$response['book_cost']),
 
             'total_orders' => $response['total_orders'] ?? 0,
             'total_completed_orders' => $response['total_completed_orders'] ?? 0,

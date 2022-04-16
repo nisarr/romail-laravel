@@ -75,15 +75,7 @@
 
                     </tr>
 
-                     <tr class="bg-white">
-                      <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
-                        Expenses
-                      </td>
-                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
-                       <strong>{{ commaSeperated(data.expense) }} </strong> <small>Rs</small>
-                      </td> 
-                    </tr>
-
+ 
                     <tr class="bg-white">
                       <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
                         Delivery Cost
@@ -112,6 +104,14 @@
                     </tr>
                     
                     
+                     <tr class="bg-white">
+                      <td class="px-4 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
+                        Expenses
+                      </td>
+                      <td class="px-4 py-1 whitespace-nowrap text-sm text-gray-900">
+                       <strong>{{ commaSeperated(data.expense) }} </strong> <small>Rs</small>
+                      </td> 
+                    </tr>
 
  
                   </tbody>
