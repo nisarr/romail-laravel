@@ -120,7 +120,7 @@ class DailyController extends Controller
                 'id' => $item->id,
                 'user_id' => $item->user_id,
                 'time_in' => $item->time_in ? substr($item->time_in,0,-3) : null,
-                'time_out' => $item->time_out ? substr($item->time_in,0,-3) : null,
+                'time_out' => $item->time_out ? substr($item->time_out,0,-3) : null,
             ];
         });
         
