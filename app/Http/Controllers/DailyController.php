@@ -70,7 +70,7 @@ class DailyController extends Controller
         }
         $daily_cash_flowToday = DailyCashFlow::where('date',$today)->first();
 
-        dd($daily_cash_flowToday,$today);
+        // dd($daily_cash_flowToday,$today);
         $daily_cash_flow = DailyCashFlow::where('date',$yesterday)->first();
         
         // dd($response);
