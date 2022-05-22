@@ -60,7 +60,7 @@ class DailyController extends Controller
         $dateCarbon = Carbon::parse($date);
 
         // YesterDay
-        $today = $dateCarbon;
+        $today = Carbon::parse($date);;
         $yesterday = $dateCarbon->subDay();
 
         $parcelDetailYesterday = ParcelDetail::where('date',$yesterday)->first();
