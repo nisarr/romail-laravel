@@ -67,6 +67,7 @@ class DailyController extends Controller
         if(!$bankDetailYesterday){
             $bankDetailYesterday = BankAccountDetail::where('date','<',$yesterday)->orderBy('date','desc')->orderBy('id','desc')->first();
         }
+        $daily_cash_flowToday = DailyCashFlow::where('date',$dateCarbon)->first();
         $daily_cash_flow = DailyCashFlow::where('date',$yesterday)->first();
         
         // dd($response);
@@ -74,7 +75,7 @@ class DailyController extends Controller
  
         $preData['daily_cash_flow_sales'] = $response['completed']['sale'];
         $preData['daily_cash_flow_bf'] =  $daily_cash_flow ? ($daily_cash_flow->cash_in_hand ?? 0) : 0;
-        $preData['daily_cash_flow_bank_deposited'] = $daily_cash_flow ? ($daily_cash_flow->bank_deposited ?? 0) : 0;
+        $preData['daily_cash_flow_bank_deposited'] = $daily_cash_flowToday ? ($daily_cash_flowToday->bank_deposited ?? 0) : 0;
 
 
         $preData['parcel_detail_bf'] = $parcelDetailYesterday ? ($parcelDetailYesterday->bf ?? 0) : 0;
