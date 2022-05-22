@@ -60,6 +60,7 @@ class DailyController extends Controller
         $dateCarbon = Carbon::parse($date);
 
         // YesterDay
+        $today = $dateCarbon;
         $yesterday = $dateCarbon->subDay();
 
         $parcelDetailYesterday = ParcelDetail::where('date',$yesterday)->first();
@@ -67,7 +68,7 @@ class DailyController extends Controller
         if(!$bankDetailYesterday){
             $bankDetailYesterday = BankAccountDetail::where('date','<',$yesterday)->orderBy('date','desc')->orderBy('id','desc')->first();
         }
-        $daily_cash_flowToday = DailyCashFlow::where('date',$dateCarbon)->first();
+        $daily_cash_flowToday = DailyCashFlow::where('date',$today)->first();
         $daily_cash_flow = DailyCashFlow::where('date',$yesterday)->first();
         
         // dd($response);
